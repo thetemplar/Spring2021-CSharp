@@ -18,33 +18,28 @@ public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println("MAIN START");
 
-        InputStream in = System.in;
-        PrintStream out = System.out;
-        System.setOut(new PrintStream(new OutputStream() {
-            @Override
-            public void write(int b) throws IOException {
-                // Do nothing.
-            }
-        }));
-        System.setIn(new InputStream() {
-            @Override
-            public int read() throws IOException {
-                throw new RuntimeException("Impossible to read from the referee");
-            }
-        });
-
         System.setProperty("game.mode", "multi");
+        System.setProperty("league.level", "1");
+        System.setProperty("allow.config.override", "true");
         Injector injector = Guice.createInjector(new GameEngineModule());
 
         Type type = Types.newParameterizedType(GameManager.class, AbstractPlayer.class);
         GameManager<AbstractPlayer> gameManager = (GameManager<AbstractPlayer>) injector.getInstance(Key.get(type));
 
+
+        WriteToPipe automated = new WriteToPipe();
+
+
         PipedOutputStream pos = new PipedOutputStream();
-        WriteToPipe automated = new WriteToPipe(pos);
+        PrintStream ps = new PrintStream(pos);
+
+
         PipedInputStream pis = new PipedInputStream();
         pis.connect(automated.pos);
-        automated.start();
+        pos.connect(automated.pis);
 
-        gameManager.start(pis, out);
+        automated.start();
+        //gameManager.start(System.in, System.out);
+        gameManager.start(pis, ps);
     }
 }

@@ -1,0 +1,1 @@
+C:\Users\Kristian\AppData\Local\Programs\Python\Python38-32\python.exe C:\Users\Kristian\IdeaProjects\SpringChallenge2021\config\socketbot.py

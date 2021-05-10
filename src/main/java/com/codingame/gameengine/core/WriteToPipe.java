@@ -47,9 +47,14 @@ class WriteToPipe extends Thread
         }
     }
 
+    public void reset() {
+        InitPhase playerInit = InitPhase.NOT_INIT;
+        run();
+    }
+
     public void run()
     {
-        System.out.println("run()");
+        //System.out.println("run()");
         String cmd = "WAIT";
         try
         {
@@ -64,7 +69,7 @@ class WriteToPipe extends Thread
             Scanner in = new Scanner(inStream);
             while(running) {
                 String s2 = in.nextLine();
-                System.out.println(s2);
+                //System.out.println(s2);
 
                 ReadCommand iCmd = ReadCommand.parse(s2);
 
@@ -95,31 +100,31 @@ class WriteToPipe extends Thread
                         for(int i = 0; i < iCmd.lineCount; i++)
                         {
                             s2 = in.nextLine();
-                            System.out.println(s2);
+                            //System.out.println(s2);
                         }
                     }
                 }
                 else if (iCmd.cmd.equals(OutputCommand.NEXT_PLAYER_INFO))
                 {
-                    System.out.println(" > [[SET_PLAYER_OUTPUT]1] ");
-                    System.out.println(" > " + cmd);
+                    //System.out.println(" > [[SET_PLAYER_OUTPUT]1] ");
+                    //System.out.println(" > " + cmd);
                     out.write("[[SET_PLAYER_OUTPUT]1]\r\n".getBytes());
                     out.write((cmd + "\r\n").getBytes());
                     playerInit = InitPhase.RUNNING;
 
 
                     if(playerInit == InitPhase.RUNNING) {
-                        System.out.println(" > [[GET_GAME_INFO]0]");
+                        //System.out.println(" > [[GET_GAME_INFO]0]");
                         out.write("[[GET_GAME_INFO]0]\n".getBytes());
                         for (int i = 0; i < iCmd.lineCount; i++) {
                             s2 = in.nextLine();
-                            System.out.println(s2);
+                            //System.out.println(s2);
                         }
                     }
                 }
                 else if (iCmd.cmd.equals(OutputCommand.SCORES))
                 {
-                    System.out.println(" > FINISHED!!!");
+                    //System.out.println(" > FINISHED!!!");
                     running = false;
                     for (int i = 0; i < iCmd.lineCount; i++) {
                         s2 = in.nextLine();
@@ -131,7 +136,7 @@ class WriteToPipe extends Thread
                     for(int i = 0; i < iCmd.lineCount; i++)
                     {
                         s2 = in.nextLine();
-                        System.out.println(s2);
+                        //System.out.println(s2);
                     }
                 }
             }
@@ -169,7 +174,7 @@ class WriteToPipe extends Thread
         }
 
         //DO MAGIC
-        
+
         return possibleActions.get(possibleActions.size() - 1);
     }
 }

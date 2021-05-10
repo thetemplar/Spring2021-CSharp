@@ -113,6 +113,11 @@ public class Game {
         sun.setOrientation(0);
 
         round = 0;
+        turn = 0;
+
+        currentFrameType = FrameType.INIT;
+        nextFrameType = FrameType.GATHERING;
+        nutrients = Config.STARTING_NUTRIENTS;
         if (ENABLE_SHADOW) {
             calculateShadows();
         }

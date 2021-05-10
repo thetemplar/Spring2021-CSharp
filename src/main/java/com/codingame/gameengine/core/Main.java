@@ -13,6 +13,7 @@ import com.google.inject.util.Types;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.util.Random;
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -29,17 +30,19 @@ public class Main {
 
         WriteToPipe automated = new WriteToPipe();
 
-
         PipedOutputStream pos = new PipedOutputStream();
         PrintStream ps = new PrintStream(pos);
-
 
         PipedInputStream pis = new PipedInputStream();
         pis.connect(automated.pos);
         pos.connect(automated.pis);
 
         automated.start();
-        //gameManager.start(System.in, System.out);
+
+        Random r = new Random();
+
+        System.setProperty("seed", "" + (r.nextInt() + System.nanoTime()));
         gameManager.start(pis, ps);
+
     }
 }
